@@ -11,7 +11,7 @@ const {
     cv::Mat I = ConvertToMat(intensities);
     cv::Mat Light = ConvertToMat(lights);
     
-    cv::Mat out = (-Light).inv();
+    cv::Mat out = (-Light).inv(cv::DECOMP_SVD);
     auto n_tilda = out * I;
 
     float rho = cv::norm(n_tilda);
