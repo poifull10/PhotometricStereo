@@ -16,10 +16,13 @@ int main(int argc, char** argv){
     cv::Vec3f(0, 1, 0),
     cv::Vec3f(0, -1, 0),
   };
-  cv::Mat normal_map(cv::Size(200, 200), CV_8UC3);
+  uint WIDTH = 400;
+  uint HEIGHT = 400;
+  cv::Mat normal_map(cv::Size(WIDTH, HEIGHT), CV_8UC3);
   
-  SphereObserver so(200, 200);
-  so.Config(40, 100);
+
+  SphereObserver so(WIDTH, HEIGHT);
+  so.Config(89, 200);
 
   std::vector<cv::Mat> images;
 
@@ -31,8 +34,8 @@ int main(int argc, char** argv){
     cv::imwrite("input" + std::to_string(i) + ".png", img);
   }
 
-  for (int iy=0; iy<200; iy++){
-    for (int ix=0; ix<200; ix++){  
+  for (int iy=0; iy<HEIGHT; iy++){
+    for (int ix=0; ix<WIDTH; ix++){  
       std::vector<uint8_t> intensities;
       
       for (int i=0;i<lights.size();i++)
@@ -47,10 +50,11 @@ int main(int argc, char** argv){
       normal_map.at<cv::Vec3b>(cv::Point(ix, iy)) = n;
     }
   }
+
   {
     std::vector<uint8_t> intensities;
     for (int i=0;i<lights.size();i++)
-      intensities.push_back(static_cast<uint8_t>(images[i].at<cv::Vec3b>(cv::Point(100, 100))[0]));
+      intensities.push_back(static_cast<uint8_t>(images[i].at<cv::Vec3b>(cv::Point(3, HEIGHT/2))[0]));
 
     PhotometricStereo ps;
     auto [normal, rho] = ps.EstimateNormal(intensities, lights);
